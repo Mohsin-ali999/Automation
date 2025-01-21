@@ -18,7 +18,7 @@ def instances(values):
     return values
 
 user_name = 'admin'
-password = 'Admin@78666'
+password = ''
 
 # def encode_password(password):
 #     password_bytes = password.encode('utf-8')  # Convert string to bytes
