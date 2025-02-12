@@ -10,6 +10,7 @@ url = ""
 driver.get(url)
 driver.maximize_window()
 
+
 #Encoded password used
 u_name = encoded_password(user_name)
 pwd = encoded_password(password)
@@ -44,7 +45,7 @@ lov_btn = driver.find_element(By.XPATH,'//*[@id="mat-menu-panel-0"]/div/div[4]/d
 lov_btn1 = driver.find_element(By.XPATH,"//mat-icon[contains(text(), 'chevron_right')]").click()
 add_btn = driver.find_element(By.XPATH,"//mat-icon[contains(text(),'add')]").click()
 lov_list = driver.find_element(By.XPATH,"/html/body/div[3]/div[2]/div/mat-dialog-container/app-lov-add/mat-dialog-content/form/div/div/div/div/mat-form-field[1]/div").click()
-element = driver.find_element(By.XPATH, '//*[@id="mat-option-125"]/span')
+element = driver.find_element(By.XPATH,"//mat-option[span[contains(text(), 'Tags')]]")
 # Scroll to the element
 driver.execute_script("arguments[0].scrollIntoView(true);", element)
 element.click()
@@ -69,7 +70,7 @@ try:
         existense = existense + 1
 
 except Exception as e:
-    print("No visible alert message was captured or it disappeared too quickly.")
+    print("No Duplicate Values Found")
 
 
 if existense > 0:
@@ -91,8 +92,25 @@ if existense > 0:
     input_dispv.clear() ; input_dispv.send_keys(display_value)
     input_desc.clear() ; input_desc.send_keys(description)
     save_btn.click()
+    time.sleep(3) #To avoid Stale Exception
 
 
+try:
+    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//mat-row")))
+    # Locate all table rows
+    rows = driver.find_elements(By.XPATH, "//mat-row")
+
+    for row in rows:
+        # Extract text from the row
+        row_text = row.text
+        if data_value in row_text:
+            # Find the 'Approve' button inside the matching row and click it
+            approve_button = WebDriverWait(row, 5).until(
+                        EC.element_to_be_clickable((By.XPATH, ".//a[contains(text(), 'Approve')]")))
+            approve_button.click()
+            break  # Stop after clicking the first matching row
+except Exception as e:
+    print(f"Error: {e}")
 
     
 # driver.quit()
