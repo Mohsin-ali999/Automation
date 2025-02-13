@@ -113,4 +113,4 @@ except Exception as e:
     print(f"Error: {e}")
 
     
-# driver.quit()
+driver.quit()
